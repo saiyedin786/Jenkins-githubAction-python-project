@@ -42,10 +42,11 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd /home/${{ secrets.EC2_APP_DIR }}
+            cd /home/ubuntu/Jenkins-githubAction-python-project || exit 1
+            git pull origin staging
             python3 -m venv venv
             source venv/bin/activate
-            git pull origin staging
+            
             pip install --upgrade pip
             pip install -r requirements.txt
             
