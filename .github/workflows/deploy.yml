@@ -43,7 +43,9 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd /home/ubuntu/Jenkins-githubAction-python-project || exit 1
+
             git pull origin staging
+            
             python3 -m venv venv
             source venv/bin/activate
             
@@ -51,7 +53,8 @@ jobs:
             pip install -r requirements.txt
             
             pkill -f app.py || true
-            nohup venv/bin/python app.py > app.log 2>&1 &
+            setsid venv/bin/python app.py > app.log 2>&1 < /dev/null &
+
   deploy-production:
     needs: build-test
     runs-on: ubuntu-latest
